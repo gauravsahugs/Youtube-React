@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../utils/chatSlice";
 import { generate, GenerateString } from "../utils/helper";
-import store from "../utils/store";
 import ChatMessage from "./ChatMessage";
 
 const LiveChat = () => {
@@ -13,7 +12,6 @@ const LiveChat = () => {
   const chatMessage = useSelector((store) => store.chat.messages);
   useEffect(() => {
     const timeout = setInterval(() => {
-     
       dispatch(
         addMessage({
           name: generate(),
@@ -41,13 +39,14 @@ const LiveChat = () => {
         onSubmit={(e) => {
           e.preventDefault();
           console.log("On submit", livemessage);
-          dispatch(addMessage({
-            name:"Anand",
-            message:livemessage,
-          }))
+          dispatch(
+            addMessage({
+              name: "Anand",
+              message: livemessage,
+            })
+          );
           setLiveMessage("");
         }}
-       
       >
         <input
           className="w-72 px-3 bg-slate-100"

@@ -4,7 +4,6 @@ import { VIDEO_LIST } from "../utils/constants";
 import VideoList from "./VideoList";
 
 const SearchVideo = () => {
- 
   const [Videolist, setVideoList] = useState([]);
   const [searchParams] = useSearchParams();
   console.log(searchParams.get("q"));
@@ -19,17 +18,19 @@ const SearchVideo = () => {
 
     setVideoList(data.items);
   }
-  if(VideoList.length==0) return null;
-  return VideoList.length>0? (
+  if (VideoList.length === 0) return null;
+  return VideoList.length > 0 ? (
     <div>
       {Videolist.map((v, index) => (
-        <Link to={"/watch?v="+v.id.videoId}>
+        <Link to={"/watch?v=" + v.id.videoId}>
           {" "}
           <VideoList key={index} data={v} />
         </Link>
       ))}
     </div>
-  ):(<h1>Loading...</h1>);
+  ) : (
+    <h1>Loading...</h1>
+  );
 };
 
 export default SearchVideo;

@@ -4,18 +4,31 @@ import { Link } from "react-router-dom";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/constants";
 import { cacheResults } from "../utils/searchSlice";
-import store from "../utils/store";
 import { closeMobileMenu } from "../utils/appSlice";
 
 const Header = () => {
   const [searchQuery, setQuery] = useState("");
-  const [suggestion, setSuggestion] = useState(null);
+  const [suggestion, setSuggestion] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(false);
 
   const dispatch = useDispatch();
   const searchCache = useSelector((store) => store.search);
 
   useEffect(() => {
+    const getSearchSuggestions = async () => {
+      console.log("API CAll" + searchQuery);
+      const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+      const json = await data.json();
+
+      setSuggestion(json[1]);
+      dispatch(
+        cacheResults({
+          [searchQuery]: json[1],
+        })
+      );
+
+      console.log(json[1]);
+    };
     const timer = setTimeout(() => {
       if (searchCache[searchQuery]) {
         setSuggestion(searchCache[searchQuery]);
@@ -28,26 +41,11 @@ const Header = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery]);
+  }, [searchQuery, searchCache, dispatch]);
 
   useEffect(() => {
     dispatch(closeMobileMenu());
   });
-
-  const getSearchSuggestions = async () => {
-    console.log("API CAll" + searchQuery);
-    const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-    const json = await data.json();
-
-    setSuggestion(json[1]);
-    dispatch(
-      cacheResults({
-        [searchQuery]: json[1],
-      })
-    );
-
-    console.log(json[1]);
-  };
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
@@ -84,7 +82,6 @@ const Header = () => {
             // onBlur={() => setShowSuggestion(false)}
           />
           <Link to={"/search?q=" + searchQuery}>
-            {" "}
             <button
               className=" border border-gray-400 p-2 rounded-r-full "
               onBlur={() => setShowSuggestion(false)}

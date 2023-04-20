@@ -3,17 +3,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import { RELATED_VIDEO, YOUTUBE_API_KEY } from "../utils/constants";
 import RelatedVideoCard from "./RelatedVideoCard";
 import { useSelector } from "react-redux";
-import useInfiniteScrolling from "../utils/useInfiniteScrolling";
 
 const RelatedVideo = () => {
   const [searchParams] = useSearchParams();
   const [relatedVideo, setRelatedVideo] = useState([]);
-   const isMenuOpen =useSelector((store)=>store.app.isMenuOpen);
+  const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
 
   console.log(searchParams.get("v"));
   useEffect(() => {
     getRelatedVideo();
   }, []);
+  console.log(isMenuOpen);
 
   const options = {
     part: "snippet",
@@ -25,7 +25,6 @@ const RelatedVideo = () => {
     key: YOUTUBE_API_KEY,
   };
   async function getRelatedVideo() {
-    
     const data = await fetch(
       `${RELATED_VIDEO}/search?` + new URLSearchParams(options)
     );
@@ -34,13 +33,14 @@ const RelatedVideo = () => {
     setRelatedVideo(videoinfo.items);
   }
 
-
-   
-
   return (
-    <div className={" h-[100px]" }>
+    <div className={" h-[100px]"}>
       {/* {relatedVideo.map((video)=>{ <RelatedVideoCard key={video.id} data={video} />})} */}
-     { relatedVideo.map((video)=>  <Link to={"/watch?v="+video.id.videoId}> <RelatedVideoCard data={video}/></Link>)}
+      {relatedVideo.map((video) => (
+        <Link to={"/watch?v=" + video.id.videoId}>
+          <RelatedVideoCard data={video} />
+        </Link>
+      ))}
     </div>
   );
 };
