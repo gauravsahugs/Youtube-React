@@ -13,7 +13,7 @@ const useInfiniteScrolling = (fetchData) => {
   useEffect(() => {
     if (!isFetching) return;
     fetchData();
-  }, [isFetching]);
+  }, [isFetching, fetchData]);
 
   function scrolling() {
     if (

@@ -16,25 +16,6 @@ const VideoContainer = () => {
   const isMobileMenuOpen = useSelector((store) => store.app.isMobileMenuOpen);
 
   console.log(isMobileMenuOpen, isMenuOpen, isFetching);
-  async function getData() {
-    let options = {
-      part: "snippet,contentDetails,statistics",
-      chart: "mostPopular",
-      maxResults: 48,
-      regionCode: "IN",
-      videoCategoryId: videoCategory,
-      key: YOUTUBE_API_KEY,
-    };
-    let response = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/videos?` +
-        new URLSearchParams(options)
-    );
-    let data = await response.json();
-    console.log(data.items);
-    setPageToken(data?.nextPageToken);
-
-    setVideos(data.items);
-  }
 
   let options = {
     part: "snippet,contentDetails,statistics",
@@ -67,7 +48,25 @@ const VideoContainer = () => {
     // window.addEventListener('resize',function(){
     //   console.log(window.innerWidth);
     // })
+    async function getData() {
+      let options = {
+        part: "snippet,contentDetails,statistics",
+        chart: "mostPopular",
+        maxResults: 48,
+        regionCode: "IN",
+        videoCategoryId: videoCategory,
+        key: YOUTUBE_API_KEY,
+      };
+      let response = await fetch(
+        `https://youtube.googleapis.com/youtube/v3/videos?` +
+          new URLSearchParams(options)
+      );
+      let data = await response.json();
+      console.log(data.items);
+      setPageToken(data?.nextPageToken);
 
+      setVideos(data.items);
+    }
     getData();
   }, [videoCategory]);
 

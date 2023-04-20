@@ -10,28 +10,28 @@ const RelatedVideo = () => {
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
 
   console.log(searchParams.get("v"));
-  useEffect(() => {
-    getRelatedVideo();
-  }, []);
-  console.log(isMenuOpen);
 
-  const options = {
-    part: "snippet",
-    maxResults: 100,
-    order: "viewCount",
-    region: "IN",
-    relatedToVideoId: searchParams?.get("v"),
-    type: "video",
-    key: YOUTUBE_API_KEY,
-  };
-  async function getRelatedVideo() {
-    const data = await fetch(
-      `${RELATED_VIDEO}/search?` + new URLSearchParams(options)
-    );
-    const videoinfo = await data.json();
-    console.log(videoinfo.items);
-    setRelatedVideo(videoinfo.items);
-  }
+  useEffect(() => {
+    const options = {
+      part: "snippet",
+      maxResults: 100,
+      order: "viewCount",
+      region: "IN",
+      relatedToVideoId: searchParams?.get("v"),
+      type: "video",
+      key: YOUTUBE_API_KEY,
+    };
+    async function getRelatedVideo() {
+      const data = await fetch(
+        `${RELATED_VIDEO}/search?` + new URLSearchParams(options)
+      );
+      const videoinfo = await data.json();
+      console.log(videoinfo.items);
+      setRelatedVideo(videoinfo.items);
+    }
+    getRelatedVideo();
+  }, [searchParams]);
+  console.log(isMenuOpen);
 
   return (
     <div className={" h-[100px]"}>

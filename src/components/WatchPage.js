@@ -25,7 +25,7 @@ const WatchPage = () => {
   useEffect(() => {
     getComment();
     dispatch(closeMenu());
-  }, []);
+  });
 
   const handleWatchLater = () => {
     dispatch(addItem(searchParams.get("v")));
